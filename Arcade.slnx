@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Arcade.vcxproj" Id="1353797d-8041-4e14-95a0-358486f08640" />
+</Solution>
