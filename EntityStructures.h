@@ -1,9 +1,11 @@
 #pragma once
 #include <optional>
+#include <variant>
 #include <vector>
 #include "MathStructures.h"
 #include <SDL3/SDL.h>
-
+// TO-DO 
+// 1. Size component used for drawing and collider setup.
 // Position
 struct Position {
 	Vector2 position{0.f, 0.f};
@@ -22,13 +24,17 @@ struct CircleCollider {
 	Vector2 offset{0.f, 0.f};
 	float radius{0.f};
 };
+struct RectangleCollider {
+	Vector2 offset{ 0.f, 0.f };
+	float w{ 0.f }, h{ 0.f };
+};
 
 struct Entity {
 	std::optional<Position> posComponent{};
 	std::optional<Velocity> velComponent{};
 	std::optional<MoveSpeed> speedComponent{};
 	std::optional<Health> healthComponent{};
-	std::optional<CircleCollider> colliderComponent{};
+	std::optional <std::variant<CircleCollider, RectangleCollider>> colliderComponent{};
 
 	std::optional<Vector2> getWorldPos() const {
 		if (!posComponent) return std::nullopt;
@@ -37,6 +43,12 @@ struct Entity {
 
 	std::optional<Vector2> getColliderCenter() const {
 		if (!posComponent || !colliderComponent) return std::nullopt;
-		return posComponent->position + colliderComponent->offset;
+		if (const auto* circle = std::get_if<CircleCollider>(&*colliderComponent)) {
+			return posComponent->position + circle->offset;
+		}
+		if (const auto* rect = std::get_if<RectangleCollider>(&*colliderComponent)) {
+			return posComponent->position + rect->offset;
+		}
+		return std::nullopt;
 	}
 };

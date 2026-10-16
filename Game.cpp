@@ -24,22 +24,22 @@ Game::Game() {
 	SDL_SetRenderVSync(m_renderer, 1);
 	SDL_SetRenderLogicalPresentation(m_renderer, CFG_LOGICAL_W, CFG_LOGICAL_H, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 	//////////////////////////////////////////////////////////////////////////////////////////
-
-	// TO REFACTOR
+	// TO REFACTOR (see EntitySystem.h)
 	Entity player;
 	player.posComponent = Position{};
 	player.velComponent = Velocity{};
-	player.speedComponent = MoveSpeed{100.f};
+	player.speedComponent = MoveSpeed{500.f};
+	//player.colliderComponent = RectangleCollider{ {CFG_PLAYER_SIZE * .5f, CFG_PLAYER_SIZE * .5f}, CFG_PLAYER_SIZE, CFG_PLAYER_SIZE };
 	player.colliderComponent = CircleCollider{ {CFG_PLAYER_SIZE / 2, CFG_PLAYER_SIZE / 2}, 15 };
 	m_entitySystem.entities.push_back(std::move(player));
 	cam.launch(m_entitySystem.entities[playerID]);
 
 
-	// TO REFACTOR
+	// TO REFACTOR (see EntitySystem.h)
 	for (int i = 0; i < 20; ++i) {
 		Entity enemy;
 		enemy.posComponent = Position{ Vector2(i * 10.f, 50.f) };
-		enemy.velComponent = Velocity{ Vector2(20.f, 0.f) };
+		enemy.velComponent = Velocity{ Vector2( 100.f / (i + 1), 0.f) };
 		enemy.colliderComponent = CircleCollider{ {CFG_PLAYER_SIZE / 2, CFG_PLAYER_SIZE / 2}, 15 };
 		enemy.healthComponent = Health{ 30 };
 		m_entitySystem.entities.push_back(enemy);
@@ -102,10 +102,7 @@ void Game::draw()
 	// Debug drawer
 	if (CFG_DBG_SHOW_COLLISIONS) {
 		for (const auto& e : m_entitySystem.entities) {
-			if (auto center = e.getColliderCenter()) {
-				Vector2 dst = cam.worldToCamera(*center);
-				DrawCollisionCircle(m_renderer, dst, e.colliderComponent->radius);
-			}
+			DrawCollision(m_renderer, e, cam);
 		}
 	}
 	// Log drawer

@@ -1,7 +1,9 @@
 #pragma once
 #include "EntityStructures.h"
 #include "CircleCollisionResolver.h"
-
+// TO-DO
+// 1. Spawn entity function.
+// 2. makePlayer, makeEnemy functions.
 struct EntitySystem {
 	std::vector<Entity> entities;
 
