@@ -28,9 +28,9 @@ Game::Game() {
 	Entity player;
 	player.posComponent = Position{};
 	player.velComponent = Velocity{};
-	player.speedComponent = MoveSpeed{500.f};
-	//player.colliderComponent = RectangleCollider{ {CFG_PLAYER_SIZE * .5f, CFG_PLAYER_SIZE * .5f}, CFG_PLAYER_SIZE, CFG_PLAYER_SIZE };
-	player.colliderComponent = CircleCollider{ {CFG_PLAYER_SIZE / 2, CFG_PLAYER_SIZE / 2}, 15 };
+	player.speedComponent = MoveSpeed{200.f};
+	player.colliderComponent = RectangleCollider{ {CFG_PLAYER_SIZE * .5f, CFG_PLAYER_SIZE * .5f}, CFG_PLAYER_SIZE, CFG_PLAYER_SIZE };
+	//player.colliderComponent = CircleCollider{ {CFG_PLAYER_SIZE / 2, CFG_PLAYER_SIZE / 2}, 15 };
 	m_entitySystem.entities.push_back(std::move(player));
 	cam.launch(m_entitySystem.entities[playerID]);
 
@@ -39,8 +39,13 @@ Game::Game() {
 	for (int i = 0; i < 20; ++i) {
 		Entity enemy;
 		enemy.posComponent = Position{ Vector2(i * 10.f, 50.f) };
-		enemy.velComponent = Velocity{ Vector2( 100.f / (i + 1), 0.f) };
-		enemy.colliderComponent = CircleCollider{ {CFG_PLAYER_SIZE / 2, CFG_PLAYER_SIZE / 2}, 15 };
+		enemy.velComponent = Velocity{ Vector2( 100.f, 0.f) };
+		if (i % 2 == 0) {
+			enemy.colliderComponent = CircleCollider{ {CFG_PLAYER_SIZE / 2, CFG_PLAYER_SIZE / 2}, 10 };
+		}
+		else {
+			enemy.colliderComponent = RectangleCollider{ {CFG_PLAYER_SIZE * .5f, CFG_PLAYER_SIZE * .5f}, CFG_PLAYER_SIZE, CFG_PLAYER_SIZE };
+		}
 		enemy.healthComponent = Health{ 30 };
 		m_entitySystem.entities.push_back(enemy);
 	}
@@ -104,6 +109,9 @@ void Game::draw()
 		for (const auto& e : m_entitySystem.entities) {
 			DrawCollision(m_renderer, e, cam);
 		}
+		SDL_FRect worldBound = { CFG_WORLD_LEFT_BOUND, CFG_WORLD_TOP_BOUND, CFG_WORLD_RIGHT_BOUND - CFG_WORLD_LEFT_BOUND, CFG_WORLD_BOTTOM_BOUND - CFG_WORLD_TOP_BOUND };
+		SDL_FRect dst = cam.worldToCamera(worldBound);
+		SDL_RenderRect(m_renderer, &dst);
 	}
 	// Log drawer
 	if (m_log) m_log->draw();

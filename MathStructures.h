@@ -10,6 +10,9 @@ struct Vector2 {
 	float magnitude() const {
 		return sqrtf(static_cast<float> (dx * dx + dy * dy));
 	}
+	float magnitudeSquared() const {
+		return dx * dx + dy * dy;
+	}
 
 	Vector2 normalized() const {
 		float mg = magnitude();

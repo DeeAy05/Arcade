@@ -3,6 +3,7 @@
 #include <variant>
 #include <vector>
 #include "MathStructures.h"
+#include "Config.h"
 #include <SDL3/SDL.h>
 // TO-DO 
 // 1. Size component used for drawing and collider setup.
@@ -34,11 +35,11 @@ struct Entity {
 	std::optional<Velocity> velComponent{};
 	std::optional<MoveSpeed> speedComponent{};
 	std::optional<Health> healthComponent{};
-	std::optional <std::variant<CircleCollider, RectangleCollider>> colliderComponent{};
+	std::optional<std::variant<CircleCollider, RectangleCollider>> colliderComponent{};
 
 	std::optional<Vector2> getWorldPos() const {
 		if (!posComponent) return std::nullopt;
-		return posComponent->position;
+		return Vector2{ posComponent->position.dx + CFG_PLAYER_SIZE / 2, posComponent->position.dy + CFG_PLAYER_SIZE / 2 };
 	}
 
 	std::optional<Vector2> getColliderCenter() const {

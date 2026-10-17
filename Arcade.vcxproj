@@ -154,7 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CircleCollisionResolver.h" />
+    <ClInclude Include="CollisionResolver.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="EntityStructures.h" />

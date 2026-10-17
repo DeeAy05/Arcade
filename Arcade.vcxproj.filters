@@ -59,7 +59,7 @@
     <ClInclude Include="Draw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CircleCollisionResolver.h">
+    <ClInclude Include="CollisionResolver.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
   </ItemGroup>
